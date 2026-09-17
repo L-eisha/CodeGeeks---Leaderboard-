@@ -81,12 +81,15 @@ class LocalRedis implements RedisStore {
   }
 }
 
-const hasRedisConfig =
-  Boolean(process.env.UPSTASH_REDIS_REST_URL) && Boolean(process.env.UPSTASH_REDIS_REST_TOKEN);
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+const hasRedisConfig = Boolean(redisUrl) && Boolean(redisToken);
+
+export const hasPersistentRedis = hasRedisConfig;
 
 // Use Upstash in hosted environments and an in-memory store for local development.
 export const redis: RedisStore = hasRedisConfig
-  ? (Redis.fromEnv() as unknown as RedisStore)
+  ? (new Redis({ url: redisUrl!, token: redisToken! }) as unknown as RedisStore)
   : new LocalRedis();
 
 export const KEYS = {

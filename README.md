@@ -24,6 +24,10 @@ Scores persist in Upstash Redis.
 4. Go to **Deployments** and **Redeploy** the latest deployment so it picks
    up the new environment variables.
 
+The Redis variables are required in Vercel for participant data to persist and
+appear for everyone. If your Vercel integration names them `KV_REST_API_URL`
+and `KV_REST_API_TOKEN`, those names are supported too.
+
 Your leaderboard is now live. Use **Bulk add** to paste participant names one
 per line, then assign teams and scores.
 

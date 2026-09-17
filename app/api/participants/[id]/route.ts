@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { redis, KEYS } from "@/lib/redis";
+import { hasPersistentRedis, redis, KEYS } from "@/lib/redis";
 import { TEAM_OPTIONS } from "@/lib/types";
 import { requireAdmin } from "@/lib/auth";
 
 const VALID_TEAM_IDS = new Set(TEAM_OPTIONS.map((t) => t.id));
 
+function storageUnavailable() {
+  return NextResponse.json(
+    { error: "Persistent storage is not configured for this deployment." },
+    { status: 503 }
+  );
+}
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (process.env.NODE_ENV === "production" && !hasPersistentRedis) {
+    return storageUnavailable();
+  }
+
   const unauthorized = requireAdmin(req);
   if (unauthorized) return unauthorized;
 
@@ -51,6 +62,10 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (process.env.NODE_ENV === "production" && !hasPersistentRedis) {
+    return storageUnavailable();
+  }
+
   const unauthorized = requireAdmin(req);
   if (unauthorized) return unauthorized;
 

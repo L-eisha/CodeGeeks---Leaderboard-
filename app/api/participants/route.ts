@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { redis, KEYS } from "@/lib/redis";
+import { hasPersistentRedis, redis, KEYS } from "@/lib/redis";
 import { Participant, TEAM_OPTIONS } from "@/lib/types";
 import { getAdminKey, requireAdmin } from "@/lib/auth";
 
 const VALID_TEAM_IDS = new Set(TEAM_OPTIONS.map((t) => t.id));
 const MAX_BULK = 300;
 const MAX_NAME_LEN = 50;
+
+function storageUnavailable() {
+  return NextResponse.json(
+    { error: "Persistent storage is not configured for this deployment." },
+    { status: 503 }
+  );
+}
 
 function makeId(name: string) {
   const slug = name
@@ -21,6 +28,10 @@ function cleanTeam(team: unknown): string {
 }
 
 export async function GET(req: NextRequest) {
+  if (process.env.NODE_ENV === "production" && !hasPersistentRedis) {
+    return storageUnavailable();
+  }
+
   const raw = await redis.zrange(KEYS.scores, 0, -1, {
     withScores: true,
     rev: true,
@@ -50,6 +61,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  if (process.env.NODE_ENV === "production" && !hasPersistentRedis) {
+    return storageUnavailable();
+  }
+
   const unauthorized = requireAdmin(req);
   if (unauthorized) return unauthorized;
 
