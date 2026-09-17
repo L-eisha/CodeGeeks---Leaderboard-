@@ -125,6 +125,43 @@ body {
   box-shadow: 0 0 10px #28c9a2;
 }
 
+.criteria-total {
+  border: 1px solid rgba(214, 83, 200, 0.35);
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  color: #f2a4e8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.criteria-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 5rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(145, 185, 255, 0.12);
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(79, 140, 255, 0.1), rgba(214, 83, 200, 0.06));
+}
+
+.criteria-points {
+  display: inline-flex;
+  min-width: 2.7rem;
+  height: 2.7rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  background: linear-gradient(145deg, #4f8cff, #7b52e8);
+  box-shadow: 0 5px 0 #283f87, 0 8px 16px rgba(79, 140, 255, 0.22);
+  color: #ffffff;
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
 .ui-depth {
   position: relative;
   transform: perspective(1000px) rotateX(0deg) translateZ(0);

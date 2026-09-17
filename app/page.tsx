@@ -7,6 +7,15 @@ import { TEAM_OPTIONS, UNASSIGNED, teamOption } from "@/lib/types";
 const QUICK_DELTAS = [-5, -1, 1, 5, 10];
 const PAGE_SIZE = 25;
 
+const SCORING_CRITERIA = [
+  { points: 50, title: "Offline event attendance", detail: "Attend and participate in an offline CodeGeeks event." },
+  { points: 10, title: "Team online meeting", detail: "Attend an online meeting with your full team." },
+  { points: 20, title: "Team offline meeting", detail: "Attend an offline meeting with your full team." },
+  { points: 10, title: "Individual team-meet summary", detail: "Submit a clear summary of an individual team meeting." },
+  { points: 10, title: "Assigned work completed", detail: "Complete work assigned to you within the expected timeline." },
+  { points: 20, title: "Exceptional work", detail: "Earn bonus points for work that goes above and beyond." },
+];
+
 function initials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
@@ -341,6 +350,29 @@ export default function Home() {
             <strong>{activeTeams}</strong>
           </div>
         </div>
+
+        <section className="criteria-panel ui-depth bg-brand-950 rounded-2xl border border-brand-100 shadow-card p-4 sm:p-5 mb-8" aria-labelledby="criteria-title">
+          <div className="flex items-end justify-between gap-3 mb-4">
+            <div>
+              <p className="section-kicker">How points are earned</p>
+              <h2 id="criteria-title" className="font-display text-lg font-bold text-brand-900">
+                Scoring criteria
+              </h2>
+            </div>
+            <span className="criteria-total">130 max</span>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {SCORING_CRITERIA.map((criterion) => (
+              <div key={criterion.title} className="criteria-item">
+                <span className="criteria-points">+{criterion.points}</span>
+                <div>
+                  <p className="text-sm font-semibold text-brand-900">{criterion.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-brand-400">{criterion.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {error && (
           <p className="text-center text-sm text-red-300 mb-6 bg-red-950/50 border border-red-900 rounded-lg py-2 px-3">
