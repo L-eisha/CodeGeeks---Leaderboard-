@@ -146,6 +146,14 @@ body {
   background: linear-gradient(135deg, rgba(79, 140, 255, 0.1), rgba(214, 83, 200, 0.06));
 }
 
+.criteria-item p {
+  color: #e8eef8;
+}
+
+.criteria-item p + p {
+  color: #b8c9e8;
+}
+
 .criteria-points {
   display: inline-flex;
   min-width: 2.7rem;
