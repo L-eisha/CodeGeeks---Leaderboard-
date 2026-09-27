@@ -78,7 +78,7 @@ function TeamSelect({
         compact ? "text-xs px-2 py-1" : "text-sm px-3 py-2"
       }`}
     >
-      <option value="">No team</option>
+      <option value="">Content Team</option>
       {TEAM_OPTIONS.map((t) => (
         <option key={t.id} value={t.id}>
           {t.label}
