@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hasPersistentRedis, redis, KEYS } from "@/lib/redis";
-import { TEAM_OPTIONS } from "@/lib/types";
+import { DEFAULT_TEAM_ID, TEAM_OPTIONS } from "@/lib/types";
 import { requireAdmin } from "@/lib/auth";
 
 const VALID_TEAM_IDS = new Set(TEAM_OPTIONS.map((t) => t.id));
@@ -43,13 +43,9 @@ export async function PATCH(
   }
 
   if (body?.team !== undefined) {
-    const team = body.team;
+    const team = body.team === "" ? DEFAULT_TEAM_ID : body.team;
     if (team === "" || VALID_TEAM_IDS.has(team)) {
-      if (team === "") {
-        await redis.hdel(KEYS.teams, id);
-      } else {
-        await redis.hset(KEYS.teams, { [id]: team });
-      }
+      await redis.hset(KEYS.teams, { [id]: team });
     } else {
       return NextResponse.json({ error: "Invalid team." }, { status: 400 });
     }

@@ -44,8 +44,9 @@ Open http://localhost:3000.
 
 ## Teams
 
-The current teams are Executive Team, Lead, Co-Lead, Event Management, Design,
-PR & Marketing, Photography, Video Editing, Anchor, and Logistics & Decor.
+The current teams are Executive Team, Tech Lead, Tech Co-Lead, Content Team,
+Event Management, Design, PR & Marketing, Photography, Video Editing, Anchor,
+and Logistics & Decor.
 They are defined in `lib/types.ts` with their badge colors.
 
 ## How it works

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Participant } from "@/lib/types";
-import { TEAM_OPTIONS, UNASSIGNED, teamOption } from "@/lib/types";
+import { DEFAULT_TEAM_ID, TEAM_OPTIONS, UNASSIGNED, teamOption } from "@/lib/types";
 
 const QUICK_DELTAS = [-5, -1, 1, 5, 10];
 const PAGE_SIZE = 25;
@@ -66,11 +66,11 @@ function TeamSelect({
   compact?: boolean;
   disabled?: boolean;
 }) {
-  const team = value ? teamOption(value) : UNASSIGNED;
+  const team = value ? teamOption(value) : teamOption(DEFAULT_TEAM_ID);
 
   return (
     <select
-      value={value}
+      value={value || DEFAULT_TEAM_ID}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
       style={{ borderColor: team.bg, color: "#e8eef8" }}
@@ -78,7 +78,6 @@ function TeamSelect({
         compact ? "text-xs px-2 py-1" : "text-sm px-3 py-2"
       }`}
     >
-      <option value="">No team</option>
       {TEAM_OPTIONS.map((t) => (
         <option key={t.id} value={t.id}>
           {t.label}
@@ -505,12 +504,16 @@ export default function Home() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <TeamSelect
-                      value={p.team}
-                      onChange={(v) => changeTeam(p.id, v)}
-                      compact
-                      disabled={!isEditor}
-                    />
+                    <div className="flex items-center gap-2">
+                      <TeamBadge team={p.team} />
+                      {isEditor && (
+                        <TeamSelect
+                          value={p.team}
+                          onChange={(v) => changeTeam(p.id, v)}
+                          compact
+                        />
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 font-display text-lg font-bold text-brand-700 text-right">
                     {p.score}
@@ -692,6 +695,9 @@ export default function Home() {
         <p className="text-center text-xs text-brand-400 mt-6">
           CodeGeeks · {participants?.length ?? 0} participant
           {participants?.length === 1 ? "" : "s"} · open to anyone with this link
+        </p>
+        <p className="text-center text-xs text-brand-500 mt-2">
+          Created by Leisha Choudhary
         </p>
       </div>
     </main>
