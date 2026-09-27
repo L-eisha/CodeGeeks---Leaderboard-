@@ -27,8 +27,7 @@ export const TEAM_OPTIONS: TeamOption[] = [
   { id: "logistics-decor", label: "Logistics & Decor", bg: "#e2e8f0", text: "#334155" },
 ];
 
-export const DEFAULT_TEAM_ID = "content-team";
-export const UNASSIGNED: TeamOption = teamOption(DEFAULT_TEAM_ID);
+export const UNASSIGNED: TeamOption = { id: "", label: "No team", bg: "#f1f5f9", text: "#64748b" };
 
 export function teamOption(id: string): TeamOption {
   return TEAM_OPTIONS.find((t) => t.id === id) ?? UNASSIGNED;

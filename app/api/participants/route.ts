@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hasPersistentRedis, redis, KEYS } from "@/lib/redis";
-import { DEFAULT_TEAM_ID, Participant, TEAM_OPTIONS } from "@/lib/types";
+import { Participant, TEAM_OPTIONS } from "@/lib/types";
 import { getAdminKey, requireAdmin } from "@/lib/auth";
 
 const VALID_TEAM_IDS = new Set(TEAM_OPTIONS.map((t) => t.id));
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
   const participants: Participant[] = ids.map((id, i) => ({
     id,
     name: (names as Record<string, string>)?.[id] ?? id,
-    team: (teams as Record<string, string>)?.[id] || DEFAULT_TEAM_ID,
+    team: (teams as Record<string, string>)?.[id] ?? "",
     score: scores[i],
   }));
 
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
   // Bulk add: { names: string[], team?: string }
   if (Array.isArray(body?.names)) {
     const rawNames: unknown[] = body.names;
-    const team = cleanTeam(body?.team) || DEFAULT_TEAM_ID;
+    const team = cleanTeam(body?.team);
 
     const cleanNames = rawNames
       .filter((n): n is string => typeof n === "string")
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Name is too long." }, { status: 400 });
   }
 
-  const team = cleanTeam(body?.team) || DEFAULT_TEAM_ID;
+  const team = cleanTeam(body?.team);
   const id = makeId(name);
   await redis.zadd(KEYS.scores, { score: 0, member: id });
   await redis.hset(KEYS.names, { [id]: name });
